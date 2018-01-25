@@ -1,5 +1,5 @@
 module.exports = {
-  entry: './app/app.js',
+  entry: './app/app.jsx',
   output: {
     path: __dirname,
     filename: './public/bundle.js'
@@ -9,9 +9,9 @@ module.exports = {
     alias: {
       reducer: 'app/reducers/main.js',
       store: 'app/storeConf.js',
-      List: 'app/components/List.js',
-      Note: 'app/components/Note.js',
-      NoteForm: 'app/components/NoteForm.js',
+      List: 'app/components/List.jsx',
+      Note: 'app/components/Note.jsx',
+      NoteForm: 'app/components/NoteForm.jsx',
       actions: 'app/actions.js'
     }
   },
