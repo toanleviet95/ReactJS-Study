@@ -1,6 +1,6 @@
 import React from 'react';
-import Note from './Note';
-import NoteForm from './NoteForm';
+import Note from 'Note';
+import NoteForm from 'NoteForm';
 import {connect} from 'react-redux';
 
 class List extends React.Component {
