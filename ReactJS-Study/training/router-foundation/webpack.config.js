@@ -11,7 +11,10 @@ module.exports = {
       Main: 'app/components/Main.jsx',
       Account: 'app/components/Account.jsx',
       Nav: 'app/components/Nav.jsx',
-      Transaction: 'app/components/Transaction.jsx'
+      Transaction: 'app/components/Transaction.jsx',
+      SignIn: 'app/components/SignIn.jsx',
+      AccountInfo: 'app/components/AccountInfo.jsx',
+      Notification: 'app/components/Notification.jsx'
     }
   },
   module: {
