@@ -10,10 +10,12 @@ class Main extends React.Component{
     var xhtml = notification != null ? <Notification txt={notification}/>: null;
     return (
       <div>
-        <h1>This is Main</h1>
+        {/* <h1>This is Main</h1> */}
         <Nav/>
+        <div className="grid-x" style={{justifyContent: "center"}}>
         {xhtml}
         {this.props.children}
+        </div>
       </div>
     )
   }

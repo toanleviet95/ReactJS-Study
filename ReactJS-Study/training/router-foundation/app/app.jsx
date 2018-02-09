@@ -42,6 +42,12 @@ var requireLogin = (nextState, replace, next) => {
   next();
 };
 
+require('style!css!foundation-sites/dist/css/foundation.min.css');
+require('style!css!sass!./scss/style.scss');
+$(document).ready(() => {
+  $(document).foundation();
+});
+
 var history = syncHistoryWithStore(hashHistory, store)
 
 ReactDOM.render(
