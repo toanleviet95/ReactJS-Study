@@ -1,7 +1,7 @@
 {
   "name": "twitter-stream-realtime",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "server.js",
   "author": "ToanLV",
   "license": "MIT",
   "scripts": {
@@ -15,8 +15,9 @@
     "express-handlebars": "^3.0.0",
     "mongoose": "^5.0.8",
     "node-jsx": "^0.13.3",
-    "ntwitter": "^0.5.0",
-    "react": "^16.2.0",
+    "twitter": "^1.2.0",
+    "react": "~0.14.6",
+    "react-dom": "~0.14.6",
     "socket.io": "^2.0.4"
   },
   "devDependencies": {
