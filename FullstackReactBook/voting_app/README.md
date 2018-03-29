@@ -17,9 +17,3 @@ npm run server
 ````
 
 The server is now running at [localhost:3000](localhost:3000)
-
-HISTORY
-------------------------------------------------------
-06/OCT/2016 ......................... PAG 26
-07/OUT/2016 ......................... PAG 39
-09/OUT/2016 ......................... PAG 41 (BACK LATER AND DO ORDENING)
