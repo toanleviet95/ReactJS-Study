@@ -1,4 +1,23 @@
 class Product extends React.Component {
+  constructor(props) {
+    super(props);
+
+    // Bind custom methods to React.Component
+    this.handleUpVote = this.handleUpVote.bind(this);
+  }
+
+  // Custom methods
+  handleUpVote() {
+    this.props.onVote(this.props.id);
+  }
+
+  // Use arrow function below if we don't need binding
+  // So you can remove constructor function
+  // handleUpVote = () => {
+  //   this.props.onVote(this.props.id);
+  // }
+
+  // Lifecycle methods
   render() {
     return (
       <div className='item'>
@@ -7,7 +26,7 @@ class Product extends React.Component {
         </div>
         <div className='middle aligned content'>
           <div className='header'>
-            <a><i className='large caret up icon'></i></a>
+            <a onClick={this.handleUpVote}><i className='large caret up icon'></i></a>
             {this.props.votes}
           </div>
           <div className='description'>
@@ -25,8 +44,46 @@ class Product extends React.Component {
 }
 
 class ProductList extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      products: []
+    };
+
+    // Bind custom methods to React.Component
+    this.handleProductUpVote = this.handleProductUpVote.bind(this);
+  }
+
+  // We can definde state outside without constructor function
+  // state = {
+  //   products: []
+  // };
+
+  // Custom methods
+  handleProductUpVote(productId) {
+    const nextProducts = this.state.products.map((product) => {
+      if (product.id === productId) {
+        // Ensure the immutablity for this.state.products
+        return Object.assign({}, product, {
+          votes: product.votes + 1
+        });
+      } else {
+        return product;
+      }
+    });
+    this.setState({
+      products: nextProducts
+    });
+  }
+
+  // Lifecycle methods
+  componentDidMount() {
+    this.setState({ products: Data }); 
+  }
+
   render() {
-    const products = Data.sort((a, b) => {
+    const products = this.state.products.sort((a, b) => {
       return b.votes - a.votes;
     });
     const productComponents = products.map((product) => {
@@ -39,6 +96,7 @@ class ProductList extends React.Component {
         votes={product.votes}
         submitterAvatarUrl={product.submitterAvatarUrl}
         productImageUrl={product.productImageUrl}
+        onVote={this.handleProductUpVote}
       />)
     });
     return (

@@ -7,13 +7,13 @@ Follow the instructions for your platform [here](https://github.com/npm/npm).
 2. Install `http-server`
 
 ````
-npm install
+npm install http-server --save
 ````
 
 3. Boot the HTTP server
 
 ````
-npm run server
+npm start
 ````
 
-The server is now running at [localhost:3000](localhost:3000)
+The server is now running at [localhost:8080](localhost:8080)
