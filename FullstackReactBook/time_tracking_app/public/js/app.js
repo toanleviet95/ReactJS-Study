@@ -2,27 +2,14 @@ class TimersDashboard extends React.Component {
   constructor() {
     super();
     this.state = {
-      timers: [
-        {
-          "title": "Mow the lawn",
-          "project": "House Chores",
-          "elapsed": 5460551,
-          "id": "0a4a79cb-b06d-4cb1-883d-549a1e3b66d7",
-          "runningSince": null
-        },
-        {
-          "title": "Clear paper jam",
-          "project": "Office Chores",
-          "elapsed": 1273998,
-          "id": "a73c1d19-f32d-4aff-b470-cea4e792406a"
-        }
-      ]
+      timers: []
     };
     this.handleCreateFormSubmit = this.handleCreateFormSubmit.bind(this);
     this.handleEditFormsubmit = this.handleEditFormsubmit.bind(this);
     this.handleTrashClick = this.handleTrashClick.bind(this);
     this.handleStartClick = this.handleStartClick.bind(this);
     this.handleStopClick = this.handleStopClick.bind(this);
+    this.loadTimersFromServer = this.loadTimersFromServer.bind(this);
   }
 
   // Custom methods
@@ -49,10 +36,16 @@ class TimersDashboard extends React.Component {
   createTimer(timer) {
     const t = helpers.newTimer(timer);
     this.setState({ timers: this.state.timers.concat(t) });
+
+    // Call API
+    client.createTimer(t);
   }
 
   deleteTimer(timerId) {
     this.setState({ timers: this.state.timers.filter(t => t.id !== timerId) });
+
+    // Call API
+    client.deleteTimer({ id: timerId });
   }
 
   updateTimer(attrs) {
@@ -68,19 +61,31 @@ class TimersDashboard extends React.Component {
         }
       })
     });
+
+    // Call API
+    client.updateTimer(attrs);
   }
 
   startTimer(timerId) {
     const now = Date.now();
-    this.setState({
-      timers: this.state.timers.map((timer) => {
-        if (timer.id === timerId) {
-          return Object.assign({}, timer, { runningSince: now });
-        } else {
-          return timer;
-        }
-      })
-    });
+
+    // Method 1
+    // this.setState({
+    //   timers: this.state.timers.map((timer) => {
+    //     if (timer.id === timerId) {
+    //       return Object.assign({}, timer, { runningSince: now });
+    //     } else {
+    //       return timer;
+    //     }
+    //   })
+    // });
+
+    // Call API
+    // client.startTimer({ id: timerId, start: now });
+
+    // Method 2
+    // Call API
+    client.startTimer({ id: timerId, start: now }).then(this.loadTimersFromServer);
   }
 
   stopTimer(timerId) {
@@ -95,9 +100,23 @@ class TimersDashboard extends React.Component {
         }
       })
     });
+
+    // Capp API
+    client.stopTimer({ id: timerId, stop: now });
+  }
+
+  loadTimersFromServer() {
+    client.getTimers((serverTimers) => {
+      this.setState({timers: serverTimers});
+    })
   }
 
   // Lifecycle methods
+  componentDidMount() {
+    this.loadTimersFromServer();
+    setInterval(this.loadTimersFromServer, 5000);
+  }
+
   render() {
     return (
       <div className='ui three column centered grid'>
