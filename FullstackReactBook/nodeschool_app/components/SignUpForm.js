@@ -1,75 +1,70 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import isEmail from 'validator/lib/isEmail';
 import Field from './Field';
 import CourseSelect from './CourseSelect';
-
-const apiClient = {
-  loadPeople: function () {
-    return {
-      then: function (cb) {
-        setTimeout(() => {
-          cb(JSON.parse(localStorage.people || '[]'));
-        }, 1000);
-      },
-    };
-  },
-
-  savePeople: function (people) {
-    const success = !!(this.count++ % 2);
-
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (!success) return reject({ success });
-
-        localStorage.people = JSON.stringify(people);
-        return resolve({ success });
-      }, 1000);
-    });
-  },
-
-  count: 1,
-};
+import apiClient from '../services';
 
 export default class SignUpForm extends React.PureComponent {
   state = {
-    fields: { name: '', email: '' },
+    fields: this.props.fields || { name: '', email: '', course: null, department: null },
     fieldErrors: {},
-    people: [],
-    _loading: false,
-    _saveStatus: 'READY',
+
+    // * No Redux way *
+    // people: [],
+    // _loading: false,
+    // _saveStatus: 'READY',
   };
 
-  componentWillMount = () => {
-    this.setState({ _loading: true });
-    apiClient.loadPeople().then(people => {
-      this.setState({ _loading: false, people: people });
-    });
+  static propTypes = {
+    people: PropTypes.array.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    saveStatus: PropTypes.string.isRequired,
+    fields: PropTypes.object,
+    onSubmit: PropTypes.func.isRequired
   }
+
+  componentWillReceiveProps = (update) => {
+    this.setState({fields: update.fields});
+  }
+
+  // * No Redux way *
+  // componentWillMount = () => {
+  //   this.setState({ _loading: true });
+  //   apiClient.loadPeople().then(people => {
+  //     this.setState({ _loading: false, people: people });
+  //   });
+  // }
 
   onFormSubmit = (e) => {
     const person = this.state.fields;
     e.preventDefault();
     if (this.validate()) return;
 
-    const people = [...this.state.people, person];
-    this.setState({ _saveStatus: 'SAVING' });
-    apiClient.savePeople(people).then(() => {
-      this.setState({
-        people,
-        fields: { name: '', email: '' },
-        _saveStatus: 'SUCCESS',
-      });
-    }).catch(err => {
-      console.error(err);
-      this.setState({ _saveStatus: 'ERROR' });
-    });
+    // * No Redux way *
+    // const people = [...this.state.people, person];
+    // this.setState({ _saveStatus: 'SAVING' });
+    // apiClient.savePeople(people).then(() => {
+    //   this.setState({
+    //     people,
+    //     fields: { name: '', email: '', course: null, department: null },
+    //     _saveStatus: 'SUCCESS',
+    //   });
+    // }).catch(err => {
+    //   console.error(err);
+    //   this.setState({ _saveStatus: 'ERROR' });
+    // });
+
+    this.props.onSubmit([...this.props.people, person]);
   }
 
   onInputChange = ({name, value, error}) => {
     const { fields, fieldErrors } = this.state;
     fields[name] = value;
     fieldErrors[name] = error;
-    this.setState({ fields, fieldErrors, _saveStatus: 'READY' });
+    // * No Redux way *
+    // this.setState({ fields, fieldErrors, _saveStatus: 'READY' });
+    this.setState({ fields, fieldErrors });
   }
 
   validate = () => {
@@ -85,9 +80,18 @@ export default class SignUpForm extends React.PureComponent {
   }
 
   render = () => {
-    if (this.state._loading) {
+    // * No Redux way *
+    // if (this.state._loading) {
+    //   return <img alt='loading' src='/img/loading.gif' />;
+    // }
+
+    if (this.props.isLoading) {
       return <img alt='loading' src='/img/loading.gif' />;
     }
+
+    const dirty = Object.keys(this.state.fields).length;
+    let status = this.props.saveStatus;
+    if (status === 'SUCCESS' && dirty) status = 'READY';
 
     return (
       <div>
@@ -120,14 +124,14 @@ export default class SignUpForm extends React.PureComponent {
             SAVING: <input value='Saving...' type='submit' disabled />,
             SUCCESS: <input value='Submit' type='submit'/>,
             ERROR: <input value='Save failed - Retry?' type='submit'/>,
-            READY: <input value='Submit' type='submit'/>
-          }[this.state._saveStatus]}
+            READY: <input value='Submit' type='submit' />
+          }[status]}
         </form>
         <div>
           <h3>People</h3>
           <ul>
             {
-              this.state.people.map(({ name, email, department, course }, i) => (
+              this.props.people.map(({ name, email, department, course }, i) => (
                 <li key={i}>{[name, email, department, course].join(' - ')}</li>
               ))
             }
