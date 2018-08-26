@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 export default class Field extends PureComponent {
   state = {
-    value: this.props.value,
+    value: '',
     error: false,
   };
 
@@ -35,7 +35,7 @@ export default class Field extends PureComponent {
         <input
           placeholder={this.props.placeholder}
           value={this.state.value}
-          onChange={this.onChange}
+          onChange={(e) => this.onChange(e)}
         />
         <span style={{color: 'red'}}>{this.state.error}</span>
       </div>

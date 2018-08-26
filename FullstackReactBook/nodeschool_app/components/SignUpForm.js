@@ -32,7 +32,7 @@ const apiClient = {
 
 export default class SignUpForm extends React.PureComponent {
   state = {
-    fields: {},
+    fields: { name: '', email: '' },
     fieldErrors: {},
     people: [],
     _loading: false,
@@ -56,7 +56,7 @@ export default class SignUpForm extends React.PureComponent {
     apiClient.savePeople(people).then(() => {
       this.setState({
         people,
-        fields: {},
+        fields: { name: '', email: '' },
         _saveStatus: 'SUCCESS',
       });
     }).catch(err => {
@@ -118,9 +118,9 @@ export default class SignUpForm extends React.PureComponent {
           <br />
           {{
             SAVING: <input value='Saving...' type='submit' disabled />,
-            SUCCESS: <input value='Saved!' type='submit' disabled />,
-            ERROR: <input value='Save failed - Retry?' type='submit' disabled={this.validate} />,
-            READY: <input value='Submit' type='submit' disabled={this.validate} />
+            SUCCESS: <input value='Submit' type='submit'/>,
+            ERROR: <input value='Save failed - Retry?' type='submit'/>,
+            READY: <input value='Submit' type='submit'/>
           }[this.state._saveStatus]}
         </form>
         <div>
