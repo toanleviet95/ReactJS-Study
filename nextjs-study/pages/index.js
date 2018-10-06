@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import fetch from 'isomorphic-unfetch'
 import Markdown from 'react-markdown'
 import Layout from '../components/layout'
